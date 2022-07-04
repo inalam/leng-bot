@@ -8,7 +8,7 @@ module.exports = {
         return;
       }
 
-      const cleanText = args.replace(/(<@!\w+>)/,'');
+      const cleanText = args.replace(/(<@\w+>)/,'');
       if (message.mentions.users.size < 1) {
         return message.reply('Tag CELENG nya dulu');
       }

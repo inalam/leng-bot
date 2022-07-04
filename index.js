@@ -145,6 +145,7 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
           textChannel.send(`Barang baru gan, silahkan check sebelum kehabisan <@&${process.env.SUBSCRIBER_ID}>  ${url}`)
           if (ENABLE_CACHE) {
             LAZYNITIP_CACHE.push(id)
+            console.log(`${word} found: ${url}`)
           }
           break
         }
@@ -179,16 +180,17 @@ client.on('ready', async () => {
   console.log(`listening on ${PORT}`);
 })
   console.log('Bot is online!');
-  client.user.setActivity('fsociety00.dat')
+  client.user.setActivity('RAM and GPU in TLT IG🗿', { type: 'WATCHING' });
 })
 
 client.on('message', async (msg) => {
   try {
     if(msg.author.bot) return;
-    if(msg.content.toLowerCase().includes('mantap')) {
-      msg.channel.send({
-        files: ['https://media.discordapp.net/attachments/300169651755941889/313669913187188747/dickhand.png?width=540&height=540']
-      })
+    if(msg.content.toLowerCase().includes('mantap') || msg.content.toLowerCase().includes('mania')) {
+      msg.channel.send('https://media.discordapp.net/attachments/300169651755941889/313669913187188747/dickhand.png?width=540&height=540')
+    }
+    if(msg.content.toLowerCase().includes('pancasila')) {
+      msg.channel.send('https://cdn.discordapp.com/avatars/306332867263332354/f700acb224a6cfcac56bb243914b1852.png?size=512')
     }
     if(msg.content.includes(process.env.CELENG_ID)) {
       const celeng = new Discord.User(msg.client, { id: process.env.CELENG_ID });

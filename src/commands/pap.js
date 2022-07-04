@@ -35,7 +35,7 @@ module.exports = {
         }
         selectedKey = keys[randomIndex];
       } else {
-        selectedKey = args.toLowerCase().split(' ').join('_');;
+        selectedKey = args.toLowerCase().split(' ').join('_');
       }
 
       const imagesByKey = papStorage[selectedKey];
@@ -53,9 +53,7 @@ module.exports = {
       if(!isValidUrl(imageUrl)) {
         imageUrl = `${process.env.WEB_SERVICE_URL}/pap_images/${imageUrl}`;
       }
-    await message.channel.send({
-        files: [imageUrl]
-      })
+    await message.channel.send(imageUrl)
     } catch (e) {
       throw e;
     }
