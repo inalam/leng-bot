@@ -12,7 +12,10 @@ require('dotenv').config();
 const ENABLE_CACHE= process.env.ENABLE_CACHE == 'true' || process.env.ENABLE_CACHE == 'TRUE'
 
 webServer.use(express.static('./src/public'))
-webServer.use(bodyParser());
+webServer.use(bodyParser.json());
+webServer.use(bodyParser.urlencoded({
+  extended: true
+}));
 webServer.use(cors());
 webServer.get('/', (req, res) => {
   res.json({
@@ -117,18 +120,30 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
       message: 'Please enter valid api key'
     });
   }
+  
   try {
+    
     const keywords = [
       "ddr4",
       "rtx",
       "rx",
-      "gtx"
+      "gtx",
+      "ryzen",
+      "intel",
+      "i3",
+      "i5",
+      "mobo",
+      "b350",
+      "b450",
+      "motherboard",
+      "monitor"
     ]
 
-    const fetchProfile = await axios.get("https://www.instagram.com/thelazytitip/channel/?__a=1", {
+    const fetchProfile = await axios.get("https://www.instagram.com/thelazytitip/channel/?__a=1&__d=dis", {
       headers: {
-        "User-Agent":" Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
-        Cookie : `sessionid=${process.env.INSTAGRAM_SESSION_ID}`
+        "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.49",
+        // Cookie : `sessionid=${process.env.INSTAGRAM_SESSION_ID}; csrftoken=dfxuPEsNNvuc2vuW4ya5F6D5nzKjb6w9`
+        Cookie: process.env.INSTAGRAM_COOKIE
       },
       withCredentials: true
     })
@@ -153,6 +168,9 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
     }
     return res.json({url})
   } catch (e) {
+    console.log(e,"\nPlease renew your instagram cookies.")
+    const report = client.channels.cache.get(process.env.GENERAL_CHANNEL_ID);
+    await report.send('Please renew <@303900226240905216> instagram cookies.')
     return res.status(500).json({
       error_code: 'SOMETHING_WRONG',
       message: 'We investigate the issue'
