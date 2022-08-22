@@ -210,6 +210,9 @@ client.on('message', async (msg) => {
     if(msg.content.toLowerCase().includes('pancasila')) {
       msg.channel.send('https://cdn.discordapp.com/avatars/306332867263332354/f700acb224a6cfcac56bb243914b1852.png?size=512')
     }
+    if(msg.content.toLowerCase().includes('turu')){ 
+      msg.channel.send({ files: ['https://cdn.discordapp.com/attachments/300169651755941889/999525103790477383/unknown.png'] }) 
+    }
     if(msg.content.includes(process.env.CELENG_ID)) {
       const celeng = new Discord.User(msg.client, { id: process.env.CELENG_ID });
       celeng.send(`DARI <@!${msg.author.id}> : ${msg.content}`);
