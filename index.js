@@ -138,17 +138,11 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
       },
       withCredentials: true
     })
-    if (typeof fetchProfile.data.graphql !== 'undefined') {
-      console.log(e,"\nPlease renew your instagram cookies.")
-      report = client.channels.cache.get(process.env.GENERAL_CHANNEL_ID);
-      return await report.send('Please renew <@303900226240905216> instagram cookies.')
-    }
     const timeline = fetchProfile.data.graphql.user.edge_owner_to_timeline_media.edges
     const lastPost = timeline[0]
     const id = lastPost.node.id
     const caption = lastPost.node.edge_media_to_caption.edges[0].node.text.toLowerCase()
     const shortcode = lastPost.node.shortcode
-    console.log(fetchProfile.data.graphql.user)
     const url = `https://www.instagram.com/p/${shortcode}`
     if (!LAZYNITIP_CACHE.includes(id)) {
       for(let word of keywords){
@@ -156,7 +150,7 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
           const textChannel = webServer.mahasiswaSantai.client.channels.cache.get(process.env.GENERAL_CHANNEL_ID);
           textChannel.send(`Barang baru gan, silahkan check sebelum kehabisan <@&${process.env.SUBSCRIBER_ID}>  ${url}`)
           if (ENABLE_CACHE) {
-            LAZYNITIP_CACHE.append(id)
+            LAZYNITIP_CACHE.push(id)
           }
           break
         }
@@ -164,10 +158,9 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
     }
     return res.json({url})
   } catch (e) {
-        return res.status(500).json({
-      error_code: 'SOMETHING_WRONG',
-      message: 'We investigate the issue'
-    })
+      console.log(e,"\nPlease renew your instagram cookies.")
+      report = client.channels.cache.get(process.env.GENERAL_CHANNEL_ID);
+      return await report.send('Please renew <@303900226240905216> instagram cookies.')
   }
 
 })
