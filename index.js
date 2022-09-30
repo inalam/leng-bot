@@ -126,9 +126,9 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
   try {
     const keywords = [
       "ddr4",
-      "rtx",
-      "rx",
-      "gtx"
+      // "rtx",
+      // "rx",
+      // "gtx"
     ]
 
     const fetchProfile = await axios.get("https://www.instagram.com/thelazytitip/channel/?__a=1&__d=dis", {
@@ -138,8 +138,14 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
       },
       withCredentials: true
     })
-    const timeline = fetchProfile.data.graphql.user.edge_owner_to_timeline_media.edges
-    const lastPost = timeline[0]
+    const timeline = fetchProfile.data.graphql.user.edge_owner_to_timeline_media.edges;
+    var lastPost = timeline[0];
+    for (let i = 0; i < timeline.length; i++){
+      if (!timeline[i].node.pinned_for_users.length>0){
+        lastPost = timeline[i];
+        break
+      }
+    }
     const id = lastPost.node.id
     const caption = lastPost.node.edge_media_to_caption.edges[0].node.text.toLowerCase()
     const shortcode = lastPost.node.shortcode
@@ -152,6 +158,7 @@ webServer.get('/lazynitip/product', async (req, res, next) => {
           if (ENABLE_CACHE) {
             LAZYNITIP_CACHE.push(id)
           }
+          console.log(word+" Found, here is the link: "+url);
           break
         }
       }
